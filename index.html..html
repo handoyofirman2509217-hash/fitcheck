@@ -1,0 +1,232 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>FitCheck Demo</title>
+<style>
+:root{--p:#7056c9;--dark:#49349b;--lav:#f0ecff;--ink:#252344;--muted:#77758c;--line:#e5e1f3}
+*{box-sizing:border-box}body{margin:0;background:#eeedf4;font:14px/1.45 system-ui;color:var(--ink)}.wrap{max-width:900px;margin:20px auto;padding:10px}.intro{text-align:center;margin-bottom:14px}.intro h1{margin:0;color:var(--dark)}.layout{display:flex;gap:22px;justify-content:center;align-items:flex-start;flex-wrap:wrap}.phone{width:350px;height:720px;background:white;border:9px solid #171725;border-radius:36px;overflow:hidden;position:relative;box-shadow:0 15px 40px #2222}.status{height:26px;padding:5px 18px;font-size:11px;display:flex;justify-content:space-between}.screen{height:calc(100% - 26px);display:none;overflow:auto;padding:16px 16px 75px;background:#fff}.screen.active{display:block}.brand{font-size:20px;font-weight:800;color:var(--dark)}.logo{display:inline-grid;place-items:center;background:var(--p);color:white;width:30px;height:30px;border-radius:10px}.hero{background:linear-gradient(135deg,#7056c9,#a193e7);padding:18px;border-radius:20px;color:white;margin:16px 0}.hero p{color:#f6f3ff}.hero h2{color:white}.btn{display:block;width:100%;border:0;border-radius:13px;padding:12px;margin-top:9px;background:var(--p);color:white;font-weight:700;cursor:pointer}.btn.alt{background:var(--lav);color:var(--dark)}h2{font-size:21px;margin:16px 0 7px}h3{font-size:15px;margin:0 0 5px}p{color:var(--muted);margin:5px 0}.card,.tile,.product{border:1px solid var(--line);border-radius:14px;padding:12px;margin:9px 0;background:white}.tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px}.tile{cursor:pointer;text-align:left}.tile span{font-size:23px;display:block}.tile b{display:block}.tile small{color:var(--muted)}.field{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;margin:5px 0 11px;font:inherit}label{font-size:12px;font-weight:700}.back{border:0;background:none;color:var(--p);font-weight:700;cursor:pointer}.product{display:flex;gap:12px;align-items:center;cursor:pointer}.product .ico{font-size:30px;background:var(--lav);padding:7px;border-radius:10px}.result{background:#eaf7ef;border:1px solid #ccebd6;border-radius:15px;padding:15px;margin:12px 0}.size{font-size:46px;font-weight:900;color:var(--dark)}.tip{background:#f4f1ff;color:#51438f;border-radius:12px;padding:11px;margin:12px 0;font-size:12px}.step{display:flex;gap:10px;margin:13px 0}.num{background:var(--lav);color:var(--dark);border-radius:50%;min-width:25px;height:25px;text-align:center;padding-top:3px;font-weight:bold}.nav{position:absolute;bottom:0;height:60px;left:0;right:0;border-top:1px solid var(--line);display:none;justify-content:space-around;background:white}.nav button{border:0;background:none;color:#85839a;font-size:10px;cursor:pointer;flex:1}.nav strong{display:block;font-size:18px}.nav .sel{color:var(--p);font-weight:bold}.caption{max-width:350px;color:#777;font-size:13px}@media(max-width:430px){.wrap{padding:4px}.phone{height:700px}}
+.uploadbox{border:1.5px dashed #c9c1e9;background:#faf8ff;border-radius:14px;padding:12px;margin:10px 0}.uploadbox input{width:100%;font-size:12px;margin-top:8px}.preview{display:none;width:100%;max-height:150px;object-fit:contain;border-radius:10px;margin-top:8px;background:#f1eff8}.colorrow{display:grid;grid-template-columns:1fr 1fr;gap:9px}.matchout{border-radius:15px;background:#eaf7ef;border:1px solid #ccebd6;padding:14px;margin:12px 0}.matchscore{font-size:32px;font-weight:900;color:#49349b}.
+/* Direct app presentation: no device frame or phone mockup */
+html,body{min-height:100%;background:#f8f7fc}
+body{margin:0}
+.wrap{max-width:none;width:100%;min-height:100vh;margin:0;padding:0}
+.intro,.caption{display:none!important}
+.layout{display:block;width:100%;min-height:100vh}
+.phone{width:100%;max-width:none;height:100dvh;min-height:600px;border:0;border-radius:0;box-shadow:none;overflow:hidden;background:#fff;position:relative;margin:0}
+.status{height:42px;padding:10px max(20px,calc((100% - 760px)/2));background:#fff;border-bottom:1px solid #f0edf7;color:var(--dark);font-weight:800;font-size:13px}
+.screen{height:calc(100% - 42px);max-width:760px;width:100%;margin:0 auto;padding:22px 22px 92px;background:#fff;overflow-y:auto}
+.screen h2{font-size:23px}
+.brand{font-size:23px}
+.hero{padding:22px;border-radius:22px}
+.tiles{gap:12px}
+.tile{padding:16px;min-height:105px}
+.card,.product{padding:15px}
+.field{padding:13px}
+.btn{padding:14px;font-size:14px}
+.uploadbox{padding:16px}
+.preview{max-height:240px}
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:760px;height:70px;z-index:20;border:1px solid var(--line);border-bottom:0;border-radius:18px 18px 0 0;box-shadow:0 -5px 22px #34245c0d}
+.nav button{font-size:11px}
+.nav strong{font-size:21px}
+@media(min-width:900px){.screen{padding:30px 34px 105px}.hero{padding:28px}.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.screen{padding:18px 16px 90px}.status{padding:10px 18px}.screen h2{font-size:21px}}
+
+</style></head><body><div class="wrap"><div class="layout"><main class="phone" aria-label="Aplikasi FitCheck"><div class="status"><span>FitCheck</span><span>● ● ●</span></div>
+<section class="screen active" id="welcome"><div class="brand"><span class="logo">⌁</span> FitCheck</div><div class="hero"><div style="font-size:42px;text-align:center">👚 📏</div><h2 style="text-align:center">Ukuran pas, belanja lebih mudah.</h2><p style="text-align:center">Rekomendasi ukuran berdasarkan ukuran tubuh dan size chart produk.</p><button class="btn" style="background:white;color:#49349b" onclick="go('signup')">Mulai →</button></div><div class="card" style="border:1px solid #c9c1e9;background:#faf8ff"><b>🎁 Gratis 14 hari</b><p>Coba semua fitur FitCheck selama 14 hari. Setelah masa trial, fitur premium memerlukan langganan.</p><button class="btn" onclick="go('subscription')">Lihat paket & trial</button></div>
+<div class="card"><b>FitCheck membantu kamu</b><p>Mencocokkan ukuran tubuh, membaca size chart, dan menyimpan produk favorit.</p></div><button class="btn alt" onclick="go('home')">Lanjut sebagai tamu</button></section>
+<section class="screen" id="signup"><button class="back" onclick="go('welcome')">← Kembali</button><h2>Buat akun (opsional)</h2><p>Akun dapat menyimpan ukuran dan favorit. Bisa juga lanjut sebagai tamu.</p><label>Nama</label><input class="field" placeholder="Nama kamu"><label>Email</label><input class="field" placeholder="nama@email.com"><label>Kata sandi</label><input class="field" type="password" placeholder="Minimal 8 karakter"><button class="btn" onclick="go('home')">Daftar / lanjut</button><button class="btn alt" onclick="go('home')">Lewati, masuk sebagai tamu</button><div class="tip">Pendaftaran hanya simulasi; data tidak disimpan.</div></section>
+<section class="screen" id="home"><div class="brand"><span class="logo">⌁</span> FitCheck</div><p>Hai! Yuk cari ukuran yang pas.</p><div class="hero"><h2>Rekomendasi ukuran</h2><p>Isi ukuran tubuh lalu cocokkan dengan tabel ukuran produk.</p><button class="btn" style="background:white;color:#49349b" onclick="go('measure')">Isi ukuran tubuh →</button></div><h3>Fitur utama</h3><div class="tiles"><button class="tile" onclick="go('product')"><span>🔎</span><b>Cari produk</b><small>Nama / brand</small></button><button class="tile" onclick="go('measure')"><span>📐</span><b>Ukuran tubuh</b><small>Input ukuranmu</small></button><button class="tile" onclick="go('guide')"><span>💡</span><b>Panduan ukur</b><small>Cara mengukur</small></button><button class="tile" onclick="go('history')"><span>♡</span><b>Favorit</b><small>Produk tersimpan</small></button><button class="tile" onclick="go('match')"><span>🧥</span><b>Match outfit</b><small>Cek atasan + celana dari foto</small></button></div>
+<div class="tiles"><button class="tile" onclick="go('stylepremium')"><span>👑</span><b>👑 Style lengkap</b><small>Fitur Premium berbayar</small></button></div>
+<div class="tip">Hasil bergantung pada ketepatan ukuran dan size chart penjual.</div></section>
+<section class="screen" id="measure"><button class="back" onclick="go('home')">← Beranda</button><h2>Masukkan ukuran tubuh</h2><p>Contoh angka bisa diubah. Gunakan satuan cm.</p><label>Tinggi badan</label><input class="field" id="height" type="number" value="160"><label>Berat badan (opsional)</label><input class="field" type="number" value="52"><label>Lingkar dada</label><input class="field" id="chest" type="number" value="84"><label>Lingkar pinggang</label><input class="field" id="waist" type="number" value="68"><label>Lingkar pinggul</label><input class="field" type="number" value="90"><button class="btn" onclick="go('product')">Simpan & pilih produk →</button><button class="btn alt" onclick="go('guide')">Cara mengukur</button></section>
+<section class="screen" id="product"><button class="back" onclick="go('home')">← Beranda</button><h2>Cari / pilih produk</h2><p>Contoh produk untuk demo; belum terhubung ke marketplace.</p><label>Nama produk</label><input class="field" id="search" placeholder="Mis. kaos oversized"><div class="product" onclick="choose('Kaos basic')"><span class="ico">👕</span><div><b>Kaos basic</b><br><small>Contoh size chart S–XL</small></div>›</div><div class="product" onclick="choose('Kemeja casual')"><span class="ico">👔</span><div><b>Kemeja casual</b><br><small>Contoh size chart S–XL</small></div>›</div><div class="product" onclick="choose('Celana jeans')"><span class="ico">👖</span><div><b>Celana jeans</b><br><small>Contoh ukuran 28–34</small></div>›</div><button class="btn alt" onclick="choose(document.getElementById('search').value||'Produk pilihan')">Gunakan nama yang diketik →</button><div class="tip">Scan barcode/tautan toko asli belum aktif dalam demo ini.</div></section>
+<section class="screen" id="result"><button class="back" onclick="go('product')">← Produk lain</button><h2 id="rtitle">Hasil rekomendasi</h2><div class="result"><small>Ukuran ilustratif yang disarankan</small><div class="size" id="rsize">M</div><b>Perkiraan, bukan jaminan pas</b><p>Disesuaikan dengan input ukuran dan contoh size chart.</p></div><div class="card"><h3>Perbandingan</h3><p id="rchart">Contoh ukuran M: dada sekitar 86–92 cm.</p></div><div class="tip">Cek size chart yang benar dari penjual. Potongan pakaian dan preferensi longgar dapat memengaruhi pilihan.</div><button class="btn" onclick="save()">♡ Simpan ke favorit</button><button class="btn alt" onclick="go('guide')">Panduan mengukur</button><button class="btn alt" onclick="go('home')">Kembali ke beranda</button></section>
+<section class="screen" id="guide"><button class="back" onclick="go('home')">← Beranda</button><h2>Panduan mengukur tubuh</h2><p>Gunakan pita ukur fleksibel, tetap mendatar, dan jangan terlalu kencang.</p><div class="step"><span class="num">1</span><div><b>Lingkar dada</b><p>Ukur bagian dada terlebar, pita sejajar lantai.</p></div></div><div class="step"><span class="num">2</span><div><b>Lingkar pinggang</b><p>Ukur pinggang alami dengan tubuh rileks.</p></div></div><div class="step"><span class="num">3</span><div><b>Lingkar pinggul</b><p>Ukur bagian pinggul paling lebar.</p></div></div><div class="step"><span class="num">4</span><div><b>Tinggi badan</b><p>Berdiri tegak tanpa alas kaki, ukur dari lantai ke puncak kepala.</p></div></div><div class="tip">Catat dalam cm, ukur ulang bila ragu, lalu cocokkan dengan tabel ukuran produk.</div><button class="btn" onclick="go('measure')">Masukkan ukuran →</button></section>
+<section class="screen" id="match"><button class="back" onclick="go('home')">← Beranda</button><h2>Cocok nggak outfit ini?</h2><p>Unggah screenshot/foto atasan dan celana yang ingin dipadukan. FitCheck akan menilai warna langsung dari foto—tanpa memilih warna secara manual.</p>
+<div class="uploadbox"><b>1. Foto / screenshot atasan</b><input type="file" accept="image/*" onchange="previewFile(this,'topPreview')"><img class="preview" id="topPreview" alt="Pratinjau atasan"></div>
+<div class="uploadbox"><b>2. Foto / screenshot celana</b><input type="file" accept="image/*" onchange="previewFile(this,'bottomPreview')"><img class="preview" id="bottomPreview" alt="Pratinjau celana"></div>
+<div class="tip">Warna tidak perlu dipilih manual. Pastikan pakaian terlihat jelas di screenshot dan tidak terlalu banyak latar belakang.</div>
+<label>Gaya yang diinginkan</label><select class="field" id="style"><option>Casual</option><option>Formal</option><option>Streetwear</option><option>Minimalis</option></select>
+<button class="btn" onclick="checkMatch()">Cek kecocokan outfit →</button><div id="matchResult" style="display:none"></div><div class="tip">Analisis membaca perkiraan warna dominan langsung dari kedua foto di browser. Tidak ada pilihan warna manual dan foto tidak diunggah ke server.</div><div class="card" style="margin-top:14px"><h3>🏬 Rekomendasi brand & toko</h3><p>Pilih toko sesuai gaya dan jenis pakaian. Ini contoh rekomendasi, bukan koneksi marketplace langsung.</p>
+<div class="product" onclick="selectBrand('UNIQLO')"><span class="ico">👕</span><div><b>UNIQLO</b><br><small>Basic wear & minimalis</small></div>›</div>
+<div class="product" onclick="selectBrand('H&M')"><span class="ico">👗</span><div><b>H&M</b><br><small>Casual & tren harian</small></div>›</div>
+<div class="product" onclick="selectBrand('ZARA')"><span class="ico">🧥</span><div><b>ZARA</b><br><small>Smart casual & gaya modern</small></div>›</div>
+<div class="product" onclick="selectBrand('Cotton On')"><span class="ico">👖</span><div><b>Cotton On</b><br><small>Casual & denim</small></div>›</div>
+<div class="product" onclick="selectBrand('Local brand / toko marketplace')"><span class="ico">🛍️</span><div><b>Brand lokal / toko marketplace</b><br><small>Bandingkan harga, ulasan, dan size chart</small></div>›</div>
+<div id="brandSelected" class="tip" style="display:none"></div></div><button class="btn alt" onclick="go('stylepremium')">👑 Cocokkan aksesori & gaya Premium →</button></section>
+<section class="screen" id="subscription"><button class="back" onclick="go('welcome')">← Kembali</button><h2>Trial & langganan</h2><div class="hero"><div style="font-size:38px;text-align:center">🎁</div><h2 style="text-align:center">Trial gratis 14 hari</h2><p style="text-align:center">Jelajahi rekomendasi ukuran, Match outfit, dan Style lengkap. Setelah 14 hari, akses premium memerlukan langganan.</p></div><div class="card"><b>Status trial perangkat ini</b><p id="trialStatus">Trial dimulai saat demo dibuka.</p><button class="btn" onclick="startTrial()">Mulai / cek trial 14 hari</button></div><div class="card"><h3>👑 FitCheck Premium (simulasi)</h3><p>• Match outfit berbasis analisis warna foto</p><p>• Rekomendasi gaya rambut, warna kerudung, tas, dan sepatu</p><p>• Inspirasi padu padan tambahan</p><h2>Rp10.000 / bulan</h2><small>Harga langganan simulasi untuk prototype; pembayaran belum aktif.</small><button class="btn" onclick="subscribeDemo()">👑 Berlangganan Rp10.000/bulan</button></div><button class="btn alt" onclick="go('home')">Lanjut ke beranda</button></section>
+<section class="screen" id="stylepremium"><button class="back" onclick="go('home')">← Beranda</button><h2>👑 Style lengkap Premium</h2><p>Fitur premium untuk mencari pelengkap outfit berdasarkan foto atasan dan celana yang kamu upload. Warna outfit otomatis mengikuti foto pengguna.</p><label>Gaya outfit</label><select class="field" id="premiumStyle"><option>Casual</option><option>Minimalis</option><option>Formal</option><option>Streetwear</option><option>Feminin</option></select><div class="card"><b>Yang ingin dicocokkan</b><p>💇‍♀️ Gaya rambut &nbsp; 🧕 Warna kerudung</p><p>👜 Warna tas &nbsp; 👟 Sepatu</p></div><button class="btn" onclick="recommendStyle()">Buat rekomendasi gaya</button><div id="styleResult" style="display:none"></div><div class="tip">Rekomendasi gaya bersifat inspirasi, bukan penilaian mutlak. Fitur premium di sini disimulasikan untuk prototype.</div><button class="btn alt" onclick="go('subscription')">Paket langganan</button></section>
+<section class="screen" id="account"><button class="back" onclick="go('home')">← Beranda</button><h2>👤 Akun Saya</h2>
+<div class="card"><b>Profil pengguna</b><p>Masuk atau buat akun untuk menyimpan ukuran tubuh, favorit, dan preferensi gaya.</p>
+<label>Nama</label><input class="field" id="accountName" placeholder="Nama kamu">
+<label>Email</label><input class="field" id="accountEmail" type="email" placeholder="nama@email.com">
+<button class="btn" onclick="alert('Simulasi akun: autentikasi belum terhubung.')">Masuk / Daftar</button></div>
+<div class="card"><b>👑 Status Premium</b><p id="accountPremiumStatus">Belum berlangganan (simulasi).</p><button class="btn alt" onclick="go('subscription')">Lihat langganan Rp10.000/bulan</button></div>
+<div class="card"><b>Pengaturan</b><button class="btn alt" onclick="go('guide')">Panduan mengukur tubuh</button><button class="btn alt" onclick="go('subscription')">Trial & langganan</button></div></section>
+<section class="screen" id="history"><button class="back" onclick="go('home')">← Beranda</button><h2>Favorit & riwayat</h2><div class="card" id="saved"><p>Belum ada produk tersimpan. Dari hasil rekomendasi, tekan Simpan ke favorit.</p></div><button class="btn alt" onclick="go('product')">Cari produk</button></section>
+<div class="nav" id="nav">
+<button id="navhome" onclick="go('home')"><strong>⌂</strong>Rekomendasi</button>
+<button id="navhistory" onclick="go('history')"><strong>♡</strong>Favorit</button>
+<button id="navaccount" onclick="go('account')"><strong>👤</strong>Akun Saya</button>
+</div></div>
+</main></div></div>
+<script>
+let chosen='Kaos basic',saved=[];
+const TRIAL_KEY='fitcheck_trial_start_v1';
+function selectBrand(name){
+ const stores={
+  'UNIQLO':{url:'https://www.uniqlo.com/id/id/',label:'Toko resmi UNIQLO Indonesia'},
+  'H&M':{url:'https://id.hm.com/',label:'Toko resmi H&M Indonesia'},
+  'ZARA':{url:'https://www.zara.com/id/',label:'Toko resmi ZARA Indonesia'},
+  'Cotton On':{url:'https://cottonon.com/ID/',label:'Toko resmi Cotton On Indonesia'},
+  'Local brand / toko marketplace':{url:'https://shopee.co.id/search?keyword=brand%20lokal%20fashion',label:'Cari brand lokal di Shopee'}
+ };
+ const store=stores[name];
+ const el=document.getElementById('brandSelected');
+ if(el&&store){el.style.display='block';el.innerHTML='<b>Dipilih: '+name+'</b><br><a href="'+store.url+'" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin:8px 0;color:#49349b;font-weight:700">🔗 '+store.label+' ↗</a><br><small>Pastikan alamat toko benar, lalu cek ulasan, harga, dan size chart sebelum membeli.</small>';}
+}
+function startTrial(){
+  let start=localStorage.getItem(TRIAL_KEY);
+  if(!start){start=String(Date.now());localStorage.setItem(TRIAL_KEY,start);}
+  updateTrialStatus();
+  alert('Trial 14 hari aktif pada demo ini. Status tersimpan di browser perangkat ini.');
+}
+function updateTrialStatus(){
+  const el=document.getElementById('trialStatus'); if(!el)return;
+  let start=localStorage.getItem(TRIAL_KEY);
+  if(!start){el.textContent='Belum dimulai — tekan tombol untuk memulai trial 14 hari.';return;}
+  const days=Math.max(0,14-Math.floor((Date.now()-Number(start))/86400000));
+  if(days>0){el.textContent='Trial aktif — sekitar '+days+' hari tersisa.';}
+  else{el.textContent='Trial berakhir. 👑 Berlangganan Rp10.000/bulan untuk membuka fitur berlangganan (simulasi).';}
+}
+function subscribeDemo(){alert('Ini prototype: pembayaran belum terhubung. Paket Premium ditandai sebagai simulasi.');}
+function recommendStyle(){
+  const s=document.getElementById('premiumStyle').value;
+  const visual=analyzeImageColors();
+  const top=visual.top, bottom=visual.bottom;
+  const result=document.getElementById('styleResult');
+  result.style.display='block';
+  if(!top || !bottom){
+    result.innerHTML='<div class="matchout"><b>Upload outfit terlebih dahulu</b><p>Unggah foto atasan dan celana melalui fitur Match Outfit. Style Premium akan mengambil warna langsung dari kedua foto tersebut, tanpa pilihan warna manual.</p><button class="btn" onclick="go(\'match\')">Upload foto outfit</button></div>';
+    return;
+  }
+  const isNeutral=c=>c.name.includes('putih')||c.name.includes('terang')||c.name.includes('hitam')||c.name.includes('gelap')||c.name.includes('abu');
+  const colors=[top,bottom];
+  const hasNeon=colors.some(c=>c.neon);
+  let palette;
+  if(hasNeon){
+    palette='Karena salah satu item terlihat sangat terang/neon, pilih kerudung atau atasan pelengkap warna putih tulang, cream, hitam, atau abu-abu. Tas dan sepatu sebaiknya warna netral seperti hitam, beige, atau putih agar outfit tidak terlalu ramai.';
+  } else if(isNeutral(top)&&isNeutral(bottom)){
+    palette='Pertahankan nuansa netral dengan tambahan warna taupe, cream, cokelat, atau burgundy sebagai aksen. Tas dan sepatu putih, hitam, atau beige akan menyatu dengan outfit.';
+  } else if(isNeutral(top)||isNeutral(bottom)){
+    palette='Gunakan warna netral yang sudah terbaca dari foto sebagai penyeimbang. Pelengkap yang aman: cream, putih tulang, hitam, taupe, atau warna senada dengan item non-netral.';
+  } else {
+    palette='Pilih warna pelengkap yang lebih kalem dari warna outfit pada foto, misalnya cream, ivory, beige, cokelat, navy, atau abu-abu. Hindari menambahkan warna terang lain agar tampilan tetap seimbang.';
+  }
+  let hair=s==='Formal'?'Sanggul rendah atau rambut rapi':'Rambut terurai natural atau ponytail rapi';
+  if(s==='Streetwear') hair='Ponytail tinggi, rambut bertekstur, atau gaya sedikit messy';
+  if(s==='Feminin') hair='Soft waves atau half-up';
+  let hijab=hasNeon?'Hitam, cream, atau abu-abu':'Ivory, taupe, hitam, atau warna senada yang lebih lembut';
+  let accessories=hasNeon?'Tas dan sepatu polos warna hitam, putih, atau beige; hindari aksesori bermotif ramai.':'Tas polos atau bermotif kecil dengan warna yang sudah ada di outfit; sepatu putih, beige, hitam, atau warna senada.';
+  result.innerHTML='<div class="matchout"><b>Inspirasi Premium berdasarkan foto outfit</b><p><b>Warna yang dibaca dari upload:</b> Atasan '+top.name+'; celana '+bottom.name+'.</p><p>💇‍♀️ <b>Rambut:</b> '+hair+'.</p><p>🧕 <b>Kerudung:</b> '+hijab+'.</p><p>👜👟 <b>Tas & sepatu:</b> '+accessories+'</p><p>🎨 <b>Arah padu padan:</b> '+palette+'</p><small>Warna utama mengikuti foto yang diunggah, bukan dipilih manual. Pastikan foto menampilkan pakaian dengan jelas.</small></div>';
+}
+function colorInfo(id, label){
+  const img=document.getElementById(id);
+  if(!img || img.style.display==='none' || !img.complete || !img.naturalWidth) return null;
+  try{
+    // Sample the central region more heavily so a white marketplace background
+    // does not wash out the garment's color.
+    const canvas=document.createElement('canvas'); canvas.width=48; canvas.height=48;
+    const ctx=canvas.getContext('2d',{willReadFrequently:true}); ctx.drawImage(img,0,0,48,48);
+    const d=ctx.getImageData(0,0,48,48).data; let pixels=[]; let colorBins=new Set();
+    for(let y=6;y<42;y++) for(let x=6;x<42;x++){
+      const i=(y*48+x)*4, r=d[i],g=d[i+1],b=d[i+2];
+      const max=Math.max(r,g,b), min=Math.min(r,g,b), delta=max-min;
+      const brightness=(r+g+b)/3, saturation=max===0?0:delta/max;
+      // Ignore likely plain white/gray background, but retain actual garment neutrals.
+      if(brightness>242 && saturation<.12) continue;
+      pixels.push({r,g,b,brightness,saturation,delta,max});
+       colorBins.add(Math.floor(r/48)+','+Math.floor(g/48)+','+Math.floor(b/48));
+    }
+    if(!pixels.length) return null;
+    // Determine vivid/neon presence from the strongest saturated pixels, not just the average.
+    const vivid=pixels.filter(p=>p.saturation>.62 && p.brightness>95 && p.max>155);
+    const neonShare=vivid.length/pixels.length;
+    // Use a saturation-weighted mean so colorful garment areas matter more than blank background.
+    let r=0,g=0,b=0,w=0;
+    pixels.forEach(p=>{const weight=1+Math.min(2,p.saturation*2);r+=p.r*weight;g+=p.g*weight;b+=p.b*weight;w+=weight;});
+    r=Math.round(r/w);g=Math.round(g/w);b=Math.round(b/w);
+    const max=Math.max(r,g,b),min=Math.min(r,g,b),delta=max-min;
+    const brightness=(r+g+b)/3, saturation=max===0?0:delta/max;
+    let name;
+    if(brightness>218 && delta<35) name='putih / terang';
+    else if(brightness<65) name='hitam / gelap';
+    else if(delta<28) name=brightness>165?'abu muda':'abu-abu';
+    else if(r>=g&&r>=b) name=(g>r*.58&&g<r*.9)?'oranye / coral':'merah / pink';
+    else if(g>=r&&g>=b) name=(r>g*.65?'kuning kehijauan':'hijau');
+    else name=(r>g*1.18?'ungu':'biru');
+    // Conservative neon flag: strong saturation in a meaningful portion of the center crop,
+    // or a highly saturated and bright dominant color.
+    const neon=neonShare>.12 || (saturation>.68 && brightness>105 && max>185);
+    return {label,name,r,g,b,neon,neonShare,brightness,saturation};
+  }catch(e){return null;}
+}
+function analyzeImageColors(){
+  const top=colorInfo('topPreview','Atasan'), bottom=colorInfo('bottomPreview','Celana');
+  return {top,bottom,notes:[top?'Atasan dari foto terdeteksi cenderung '+top.name+(top.neon?' (sangat terang/neon)':'')+'.':null,bottom?'Celana dari foto terdeteksi cenderung '+bottom.name+(bottom.neon?' (sangat terang/neon)':'')+'.':null].filter(Boolean)};
+}
+function checkMatch(){
+  const style=document.getElementById('style').value;
+  const visual=analyzeImageColors();
+  const top=visual.top, bottom=visual.bottom;
+  const result=document.getElementById('matchResult');
+  result.style.display='block';
+  if(!top || !bottom){
+    result.innerHTML='<div class="matchout"><b>Unggah dua foto terlebih dahulu</b><p>FitCheck memerlukan foto atasan dan bawahan untuk menilai warna. Pilihan warna manual tidak digunakan.</p></div>';
+    return;
+  }
+  const neutral=c=>c.name.includes('putih')||c.name.includes('terang')||c.name.includes('hitam')||c.name.includes('gelap')||c.name.includes('abu');
+  const dist=Math.sqrt(Math.pow(top.r-bottom.r,2)+Math.pow(top.g-bottom.g,2)+Math.pow(top.b-bottom.b,2));
+  const striking=top.neon||bottom.neon||top.busyPattern||bottom.busyPattern;
+  let score=0, advice='', recommendation='';
+  if(striking){
+    score=top.neon&&bottom.neon?45:top.busyPattern||bottom.busyPattern?56:54;
+    advice='Salah satu pakaian terdeteksi memiliki warna sangat terang/neon atau tampilan warna/motif yang berpotensi terlalu mencolok. Supaya outfit tidak saling berebut perhatian, jadikan hanya satu item sebagai fokus.';
+    if(top.neon||top.busyPattern){
+      recommendation='Atasan alternatif: putih tulang, cream, hitam, atau abu-abu polos. Padukan dengan bawahan navy, denim biru tua, hitam, atau beige. Jika tetap memakai atasan mencolok, pilih bawahan polos tanpa motif.';
+    } else {
+      recommendation='Bawahan alternatif: hitam, navy, denim biru tua, atau beige polos. Padukan dengan atasan putih tulang, cream, atau warna netral. Jika tetap memakai bawahan bermotif ramai, pilih atasan polos.';
+    }
+  } else if(neutral(top)&&neutral(bottom)){
+    score=dist<45?92:86;
+    advice='Kedua item memiliki warna netral yang mudah dipadukan dan tampil seimbang.';
+    recommendation='Kombinasi ini sudah cocok. Untuk variasi, tambahkan aksen taupe, burgundy, olive, atau cokelat. Jika salah satu item bermotif, pilih motif kecil dan warna yang masih mengambil palet netral outfit.';
+  } else if(neutral(top)||neutral(bottom)){
+    score=dist>290?75:90;
+    advice=dist>290?'Satu item netral membantu, tetapi perbedaan warna kedua pakaian cukup kuat sehingga perlu penyeimbang.':'Satu item netral menyeimbangkan warna item lainnya sehingga kombinasi terlihat serasi.';
+    recommendation='Pertahankan item netral sebagai penyeimbang. Pilih pelengkap warna cream, putih tulang, beige, navy, atau warna senada dengan item berwarna. Motif garis kecil atau motif minimalis masih cocok; hindari motif besar yang terlalu ramai.';
+  } else if(dist<55){
+    score=93;
+    advice='Warna kedua pakaian berdekatan dan membentuk paduan senada yang harmonis.';
+    recommendation='Kombinasi sudah cocok. Tambahkan warna netral seperti cream, ivory, atau cokelat muda. Jika ingin motif, pilih motif kecil dengan warna senada agar tampilan tetap rapi.';
+  } else if(dist<150){
+    score=84;
+    advice='Perbedaan warna memberi kontras yang masih enak dilihat dan cukup seimbang.';
+    recommendation='Pertahankan salah satu warna sebagai fokus. Warna pelengkap yang aman adalah putih tulang, cream, beige, navy, atau abu-abu. Pilih motif sederhana dengan maksimal dua warna yang masih senada.';
+  } else {
+    score=76;
+    advice='Kedua warna memiliki kontras cukup kuat. Kombinasi masih bisa digunakan, tetapi akan lebih serasi jika salah satu item dibuat lebih netral.';
+    recommendation='Coba ganti atasan atau bawahan dengan hitam, putih tulang, cream, beige, atau denim biru tua. Jika ingin memakai motif, pilih motif kecil dan warna dasar netral agar tidak bertabrakan.';
+  }
+  if(style==='Formal'){
+    if(top.neon||bottom.neon) score=Math.min(score,54);
+    advice+=' Untuk gaya formal, warna neon atau kontras ekstrem cenderung kurang serasi.';
+    recommendation+=' Untuk formal, utamakan hitam, navy, putih tulang, atau abu-abu.';
+  }
+  if(style==='Streetwear') advice+=' Untuk streetwear, warna kuat tetap bisa dipakai, tetapi idealnya hanya satu item yang menjadi fokus.';
+  score=Math.max(0,Math.min(100,Math.round(score)));
+  result.innerHTML='<div class="matchout"><div class="matchscore">'+score+' / 100</div><b>Perkiraan kecocokan warna — '+style+'</b><p>'+advice+'</p><div class="card"><b>🎨 Rekomendasi warna alternatif</b><p>'+recommendation+'</p></div><p><b>Warna yang dibaca dari foto:</b><br>'+visual.notes.join('<br>')+'</p><small>Skor menilai perkiraan warna dari area tengah foto. Latar belakang, pencahayaan, motif, atau foto produk yang menyisakan banyak ruang kosong masih dapat memengaruhi pembacaan.</small></div>';
+}
+function go(id){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');let show=['home','measure','product','history','match','account'].includes(id);document.getElementById('nav').style.display=show?'flex':'none';document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('sel'));let navId=id==='account'?'account':id==='history'?'history':'home';let b=document.getElementById('nav'+navId);if(b)b.classList.add('sel')}
+function choose(name){chosen=name;let c=Number(document.getElementById('chest').value||84),w=Number(document.getElementById('waist').value||68);let size=name.includes('jeans')?(w<=70?'28':w<=76?'30':w<=82?'32':'34'):(c<=82?'S':c<=92?'M':c<=100?'L':'XL');document.getElementById('rtitle').textContent='Rekomendasi untuk '+name;document.getElementById('rsize').textContent=size;document.getElementById('rchart').textContent=name.includes('jeans')?'Contoh: ukuran '+size+' dicocokkan dengan rentang pinggang pada tabel penjual.':'Contoh: '+size+' dipilih dari rentang lingkar dada pada size chart ilustratif.';go('result')}
+function save(){let item=chosen+' — rekomendasi ukuran';if(!saved.includes(item))saved.push(item);document.getElementById('saved').innerHTML='<b>♡ Tersimpan</b><p>'+saved.map(x=>'• '+x).join('<br>')+'</p>';go('history')}
+function previewFile(input,imgId){const img=document.getElementById(imgId);if(input.files&&input.files[0]){img.src=URL.createObjectURL(input.files[0]);img.style.display='block';}}
+document.addEventListener('DOMContentLoaded',updateTrialStatus);
+</script></body></html>
